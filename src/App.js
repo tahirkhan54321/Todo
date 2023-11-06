@@ -4,6 +4,7 @@ import TodoTable from "./components/TodoTable";
 import NewTodoForm from "./components/NewTodoForm";
 
 function App() {
+  const [showAddTodoForm, setShowAddTodoForm] = useState(false);
 
   const [todos, setTodos] = useState([
     { rowNumber: 1, rowDescription: "Feed puppy", rowAssigned: "User One" },
@@ -18,12 +19,12 @@ function App() {
     } else {
       rowNumber = 1;
     }
-      const newTodo = {
-        rowNumber: todos.length + 1,
-        rowDescription: description,
-        rowAssigned: assigned,
-      };
-      setTodos(todos => [...todos, newTodo])
+    const newTodo = {
+      rowNumber: todos.length + 1,
+      rowDescription: description,
+      rowAssigned: assigned,
+    };
+    setTodos((todos) => [...todos, newTodo]);
   };
 
   const deleteTodo = (deleteTodoRowNumber) => {
@@ -31,8 +32,7 @@ function App() {
       return value.rowNumber !== deleteTodoRowNumber;
     });
     setTodos(filtered); //todos are now just the filtered list
-  }
-
+  };
 
   return (
     <div className="mt-5 container">
@@ -40,13 +40,19 @@ function App() {
         <div className="card-header">Your Todo's</div>
         <div className="card-body">
           <TodoTable todos={todos} deleteTodo={deleteTodo} />
-          <button className="btn btn-primary">
-            Add new todo
+          <button
+            onClick={() => setShowAddTodoForm(!showAddTodoForm)}
+            className="btn btn-primary"
+          >
+            {showAddTodoForm ? 'Close New Todo' : 'New Todo'} 
           </button>
           {/* When the user clicks the "Add new todo" button, the addTodo 
           function is called directly. 
           This function appends a new to-do item to the todos state array. */}
-          <NewTodoForm addTodo={addTodo} /> 
+
+          {
+            showAddTodoForm && <NewTodoForm addTodo={addTodo} /> //conditional render
+          }
           {/* prop being passed to the NewTodoForm component. 
           It passes the addTodo function from the parent App component 
           to the NewTodoForm component. */}
